@@ -30,28 +30,28 @@ def SendMsgToSkype(full_name, path, message, image=False):
     print("-------> Sending Message to", contact["name"])
 
     ch = sk.contacts[contact["id"]].chat
-    ch.sendFile(open(path, "rb"),name="jabba", image=image)
+    ch.sendFile(open(path, "rb"),name=f"{message}.apk", image=image)
     ch.sendMsg(message)
 
     appIcon = path.split("build")[0]+r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
     if(image):
-        toast("Jarvis: App Successfully Sent via Skype", "Jarvis has successfully built and sent the app to {} via Skype Succesfully...".format(contact["name"]), icon=appIcon, image=path)
+        toast("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {contact['name']} via Skype Succesfully...", icon=appIcon, image=path)
     else:    
-        toast("Jarvis: App Successfully Sent via Skype", "Jarvis has successfully built and sent the app to {} via Skype Succesfully...".format(contact["name"]), icon=appIcon)
+        toast("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {contact['name']} via Skype Succesfully...", icon=appIcon)
 
     print("-------> Message sent successfully" , contact["name"])
 
-    
+SendMsgToSkype("Musavir Waseem", r"C:\Users\MusavirWaseem\Downloads\app-release (2).apk", "yele bhai")
 
 # ch = sk.contacts["live:.cid.c53dfb0025e178fa"].chat
 # msg = ch.sendMsg("Hello. from python script")
 
-if __name__ == "__main__":
-    # Example usage
-    print("Welcome to JARVIS send File to skype", sys.argv)
+# if __name__ == "__main__":
+#     # Example usage
+#     print("Welcome to JARVIS send File to skype", sys.argv)
 
-    fullName = sys.argv[1]
-    path = sys.argv[2]
-    message = sys.argv[3]
+#     fullName = sys.argv[1]
+#     path = sys.argv[2]
+#     message = sys.argv[3]
 
-    # SendMsgToSkype(fullName, path, message)
+#     # SendMsgToSkype(fullName, path, message)
