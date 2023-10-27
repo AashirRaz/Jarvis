@@ -9,7 +9,7 @@ import shutil
 import traceback
 import os
 import sendToSkype
-from SeleniumConstants import Settings, SeleniumXpaths, SystemPaths, WebsiteLink, LoadingState
+from Constants import Settings, SeleniumXpaths, SystemPaths, WebsiteLink, LoadingState
  
 
 def UploadToDiawi(full_name, app_path, message):

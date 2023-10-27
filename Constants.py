@@ -1,3 +1,5 @@
+import os
+
 class SeleniumXpaths:
     FileUploadXpath = "/html/body/section/section[2]/div[1]/form/div[1]/div[2]/input"
     LoadingText = "/html/body/section/section[2]/div[1]/form/div[1]/div[1]/div/div/div/ul/li/div[3]"
@@ -22,3 +24,8 @@ class WebsiteLink:
 
 class LoadingState:
     Completed = "100%"
+
+class Skype:
+    UserName = os.getenv("SKYPE_USERNAME")
+    Password = os.getenv("SKYPE_PASSWORD")
+    IconPath = r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
