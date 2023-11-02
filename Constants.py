@@ -26,6 +26,6 @@ class LoadingState:
     Completed = "100%"
 
 class Skype:
-    UserName = os.getenv("SKYPE_USERNAME")
-    Password = os.getenv("SKYPE_PASSWORD")
+    UserName = "aashir_raza1602@outlook.com"
+    Password = "@@$hir123"
     IconPath = r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"

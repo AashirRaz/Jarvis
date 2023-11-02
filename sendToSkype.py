@@ -46,12 +46,12 @@ def SendMsgToSkype(full_name, path, message, image=False):
     if(image):
         toast("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", icon=appIcon, image=path)
     else:    
-        toast("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", icon=appIcon)
+        toast("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", icon=appIcon, on_click=path)
 
 
 def sendMessagesInParallel(contact, path, message, image=False):
     ch = sk.contacts[contact["id"]].chat
-    ch.sendFile(open(path, "rb"),name=f"{message}.apk", image=image)
+    ch.sendFile(open(path, "rb"),name=f"{message}.{path.split('app-release.')[1]}", image=image)
     ch.sendMsg(message)
 
 
