@@ -49,15 +49,17 @@ def UploadToDiawi(full_name, app_path, message):
 
     response = requests.get(url, stream=True)
 
-    with open(os.path.join(SystemPaths.ImageFolderPath, f"app_qrcode{count + 1}.png"), 'wb') as out_file:
+    imagePath = os.path.join(SystemPaths.ImageFolderPath, f"app_qrcode{count + 1}.png")
+
+    with open(imagePath, 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
     del response
 
     print("image has been downloaded")
 
     try:
-        filePath = os.path.join(SystemPaths.ImageFolderPath, f"app_qrcode{count + 1}.png")
-        sendToSkype.SendMsgToSkype(full_name, filePath, f"{message} Diawi Link: {link}", image=True)
+        sendToSkype.SendMsgToSkype(full_name, imagePath, f"{message} Diawi Link: {link}", image=True)
+        os.remove(imagePath)
 
     except:
         print("An exception occurred")
