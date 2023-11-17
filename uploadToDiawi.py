@@ -24,44 +24,37 @@ def UploadToDiawi(full_name, app_path, message):
     chrome_options.add_argument(Settings.LOG_LEVEL3)
     chrome_options.add_argument(Settings.IGNORE_CERTIFICATE_ERRORS)
 
-    driver = webdriver.Chrome(options=chrome_options)
+    with webdriver.Chrome(options=chrome_options) as driver:
+        driver.get(WebsiteLink.Diawi)
+        element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.FileUploadXpath)))
+        fileupload = driver.find_element(By.XPATH, SeleniumXpaths.FileUploadXpath).send_keys(app_path)
 
-    driver.get(WebsiteLink.Diawi)
+        #waiting for loading
+        while driver.find_element(By.XPATH, SeleniumXpaths.LoadingText).text != LoadingState.Completed:
+            continue
 
-    element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.FileUploadXpath)))
+        submitbutton = driver.find_element(By.XPATH, SeleniumXpaths.SubmitButtonXpath).click()
+        element = WebDriverWait(driver=driver, timeout=500).until(EC.presence_of_element_located(((By.XPATH, SeleniumXpaths.UrlLinkElement))))
 
-    fileupload = driver.find_element(By.XPATH, SeleniumXpaths.FileUploadXpath).send_keys(app_path)
+        link = driver.find_element(By.XPATH, SeleniumXpaths.UrlLinkElement).text
+        image = driver.find_element(By.XPATH, SeleniumXpaths.ImageElementXpath)
+        src = ''
+        while src == '':
+            src = image.get_attribute('src')
+            url = src
 
-    #waiting for loading
-    while driver.find_element(By.XPATH, SeleniumXpaths.LoadingText).text != LoadingState.Completed:
-        continue
+        response = requests.get(url, stream=True)
+        imagePath = os.path.join(SystemPaths.ImageFolderPath, f"app_qrcode{count + 1}.png")
 
-    submitbutton = driver.find_element(By.XPATH, SeleniumXpaths.SubmitButtonXpath).click()
+        with open(imagePath, 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
+        print("image has been downloaded")
 
-    element = WebDriverWait(driver=driver, timeout=500).until(EC.presence_of_element_located(((By.XPATH, SeleniumXpaths.UrlLinkElement))))
-
-    link = driver.find_element(By.XPATH, SeleniumXpaths.UrlLinkElement).text
-    image = driver.find_element(By.XPATH, SeleniumXpaths.ImageElementXpath)
-    src = ''
-    while src == '':
-        src = image.get_attribute('src')
-        url = src
-
-    response = requests.get(url, stream=True)
-
-    imagePath = os.path.join(SystemPaths.ImageFolderPath, f"app_qrcode{count + 1}.png")
-
-    with open(imagePath, 'wb') as out_file:
-        shutil.copyfileobj(response.raw, out_file)
-    del response
-
-    print("image has been downloaded")
-
-    try:
-        sendToSkype.SendMsgToSkype(full_name, imagePath, f"{message} Diawi Link: {link}", image=True)
-        os.remove(imagePath)
-
-    except:
-        print("An exception occurred")
-        traceback.print_exc()
+        try:
+            sendToSkype.SendMsgToSkype(full_name, imagePath, f"{message} Diawi Link: {link}", image=True)
+            os.remove(imagePath)
+        except:
+            print("An exception occurred")
+            traceback.print_exc()
 
