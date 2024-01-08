@@ -50,8 +50,10 @@ def SendMsgToSkype(full_name, path, message, image=False):
 
 
 def sendMessagesInParallel(contact, path, message, image=False):
+    print("=======> Sending Message to", path)
+    extension = path.split(".")[1]
     ch = sk.contacts[contact["id"]].chat
-    ch.sendFile(open(path, "rb"),name=f"{message}.{path.split('app-release.')[1]}", image=image)
+    ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
     ch.sendMsg(message)
 
 
