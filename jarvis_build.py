@@ -4,70 +4,44 @@ import subprocess
 import sys
 import sendToSkype
 import uploadToDiawi
+from Constants import OS, PathConstants
+from reusableFunctions import jarvis_init
+
+
 
 def jarvis_build(directory_path, build_type, sendToWhom): 
-    try:
-        
-        base_path = r"C:\AashirRaza\Koderlabs"
-        full_path = os.path.join(base_path, directory_path)
-
-        print("-------> Navigating to directory")
-
-        os.chdir(full_path)
-
-        print("-------> Directory navigation successful.\n")
-
+    try: 
+        full_path:str = jarvis_init(directory_path)
 
         if build_type == "release":
-            print("-------> Making release build\n")
-
             # Change to the "android" directory
             android_path = os.path.join(full_path, "android")
             os.chdir(android_path)
 
-            subprocess.run(["gradlew", "assembleRelease"], shell=True, check=True)
+            subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], shell=True, check=True)
 
             # Determine the package size
-            package_path = os.path.join(
-                android_path,
-                r"app\build\outputs\apk\release\app-release.apk",
-            )
-
+            package_path = os.path.join(android_path, PathConstants.AndroidPathAPK)
 
             package_size = os.path.getsize(package_path) / (1024 * 1024)
 
-            print(f"Package size is {package_size} MB")
-
-            if package_size < 60:
+            if package_size < 250:
                 print("Uploading build to Diawi...")
-
                 uploadToDiawi.UploadToDiawi(sendToWhom, package_path, directory_path)
-                # sendToSkype.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
-                
-                # Place your Diawi upload logic here
-                # You might use requests to upload the build to Diawi
-
             else:
                 sendToSkype.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
-                print(f"Build package is too large to upload to Diawi ({package_size} MB).")
 
         if build_type == "bundle":
             print("Making bundle build...")
 
-            # Change to the "android" directory
             android_path = os.path.join(full_path, "android")
             os.chdir(android_path)
 
-            subprocess.run(["gradlew", "bundleRelease"], shell=True, check=True)
+            subprocess.run(["./gradlew bundleRelease"] if OS.IOS else ["gradlew", "bundleRelease"], shell=True, check=True)
 
-            # Determine the package size
-            package_path = os.path.join(
-                android_path,
-                r"app\build\outputs\bundle\release\app-release.aab",
-            )
+            package_path = os.path.join(android_path, PathConstants.AndroidPathBundle)
 
             sendToSkype.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
-            print(f"Build package is too large to upload to Diawi ({package_size} MB).")
 
     except:
         pass
@@ -75,6 +49,8 @@ def jarvis_build(directory_path, build_type, sendToWhom):
 
 
 if __name__ == "__main__":
+    sendToSkype.init_skype()
+
     print("\n")
     print("""
                      .B@@@@@@!  ?###&&&@@@@   . ^5GB#&&&@@@@@@&B7 !@@@@@@7  J@@@@@&:JGGB#&G    :!YPB&&@@@&#G 

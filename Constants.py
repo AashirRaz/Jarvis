@@ -1,6 +1,20 @@
 import os
+from sys import platform
 
+class OS:
+    IOS = platform == "darwin"
+    WINDOWS = platform == "win32"
+    LINXUS = platform == "linux"
+class PathConstants:
+    BasePath = r"/Users/aashirraza/Desktop/Tests"
+    AndroidPathAPK = r"app/build/outputs/apk/release/app-release.apk" if OS.IOS else r"app\build\outputs\apk\release\app-release.apk"
+    AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
+    IconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
 class SeleniumXpaths:
+    LoginPageButton = r"/html/body/header/div/div[2]/div/span[1]/a"
+    EmailAddress = r"/html/body/div[1]/div/form/div[2]/input"
+    Password = r"/html/body/div[1]/div/form/div[3]/input"
+    LoginButton = r"/html/body/div[1]/div/form/div[4]/input"
     FileUploadXpath = "/html/body/section/section[2]/div[1]/form/div[1]/div[2]/input"
     LoadingText = "/html/body/section/section[2]/div[1]/form/div[1]/div[1]/div/div/div/ul/li/div[3]"
     SubmitButtonXpath = "/html/body/section/section[2]/div[1]/form/div[3]/input"
@@ -15,7 +29,7 @@ class Settings:
 
 
 class SystemPaths:
-    ImageFolderPath = r"C:\AashirRaza\Scripts\diawiScreenshots"
+    ImageFolderPath = r"/Users/aashirraza/Desktop/Tests/Jarvis/temp/app_qrcode.png"
 
 
 class WebsiteLink:
@@ -24,8 +38,3 @@ class WebsiteLink:
 
 class LoadingState:
     Completed = "100%"
-
-class Skype:
-    UserName = "aashir_raza1602@outlook.com"
-    Password = "@@$hir123"
-    IconPath = r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"

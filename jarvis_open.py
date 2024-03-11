@@ -2,22 +2,14 @@
 import os
 import subprocess
 import sys
+from Constants import OS, PathConstants
+from reusableFunctions import jarvis_init
 
-def jarvis_open(directory_path, action): 
+def jarvis_open(directory_path): 
 
-    base_path = r"C:\AashirRaza\Koderlabs"
-    full_path = os.path.join(base_path, directory_path)
+    jarvis_init(directory_path)
 
-    print("-------> Navigating to directory")
-
-    os.chdir(full_path)
-
-    if action == "open":
-        print("-------> Starting code")
-        subprocess.run(["code", "."], shell=True, check=True)
-                
-    print("-------> Directory navigation successful.\n")
-
+    subprocess.run(["code ."] if OS.IOS else ["code", "."], shell=True, check=True)
 
 if __name__ == "__main__":
     print("\n")
@@ -31,6 +23,5 @@ if __name__ == "__main__":
     print("-------> Executing Your Command")
 
     directory_path = sys.argv[1]
-    action = sys.argv[2]
     
-    jarvis_open(directory_path, action)
+    jarvis_open(directory_path)
