@@ -12,8 +12,6 @@ import os
 from Constants import Settings, SeleniumXpaths, SystemPaths, WebsiteLink, LoadingState
 from Credentials import Credentials
  
-
-
 class DiawiService():
     driver = None
     def __init__(self) -> None:

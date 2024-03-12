@@ -7,8 +7,6 @@ from DiawiService import DiawiService
 from Constants import OS, PathConstants
 from reusableFunctions import jarvis_init
 
-
-
 def jarvis_build(directory_path, build_type, sendToWhom, skypeService:SkypeService, diawiService:DiawiService): 
     try:
         full_path:str = jarvis_init(directory_path)
@@ -40,8 +38,6 @@ def jarvis_build(directory_path, build_type, sendToWhom, skypeService:SkypeServi
             skypeService.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
     except:
         pass
-
-
 
 if __name__ == "__main__":
     skypeService = SkypeService()
