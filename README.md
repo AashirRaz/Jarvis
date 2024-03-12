@@ -1,11 +1,31 @@
+# JARVIS
+
 Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mobile applications and sending them to your teammates using Skype
 
 ## Pre Requisites for Installation
 
-> Python 3
-> ChromeDriver
+Python 3
+ChromeDriver
+Powershell 7
 
 ## Configuration
+
+### Windows
+
+Open your Terminal as Administrator
+Enter the following into your terminal
+
+```sh
+notepad $PROFILE
+```
+
+if you encounter any error regarding missing profiles, Enter the following code and repeat above step
+
+```sh
+New-Item -Path $PROFILE -ItemType File -Force
+```
+
+Paste the below code into your
 
 ```ps1
 function Get-FileNames {
@@ -56,16 +76,6 @@ Function init {
 
 Set-Alias -Name jarvis_build -Value init
 ```
-
-## Versioning
-
-ical.net uses [semantic versioning](http://semver.org/). In a nutshell:
-
-> Given a version number MAJOR.MINOR.PATCH, increment the:
->
-> 1. MAJOR version when you make incompatible API changes,
-> 2. MINOR version when you add functionality in a backwards-compatible manner, and
-> 3. PATCH version when you make backwards-compatible bug fixes.
 
 ## Contributing
 
