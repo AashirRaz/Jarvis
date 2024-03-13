@@ -22,19 +22,20 @@ class DiawiService():
         self.driver = webdriver.Chrome(options=chrome_options)
 
     def UploadToDiawi(self, full_name, app_path=None, message='', skypeService:SkypeService=None):
-        self.driver.get(WebsiteLink.Diawi)
+        if Credentials.HasDiawiAccount:
+            self.driver.get(WebsiteLink.Diawi)
 
-        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginPageButton)))
-        self.driver.find_element(By.XPATH, SeleniumXpaths.LoginPageButton).click()
+            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginPageButton)))
+            self.driver.find_element(By.XPATH, SeleniumXpaths.LoginPageButton).click()
 
-        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.EmailAddress)))
-        self.driver.find_element(By.XPATH, SeleniumXpaths.EmailAddress).send_keys(Credentials.DiawiEmail)
+            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.EmailAddress)))
+            self.driver.find_element(By.XPATH, SeleniumXpaths.EmailAddress).send_keys(Credentials.DiawiEmail)
 
-        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.Password)))
-        self.driver.find_element(By.XPATH, SeleniumXpaths.Password).send_keys(Credentials.DiawiPassword)
+            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.Password)))
+            self.driver.find_element(By.XPATH, SeleniumXpaths.Password).send_keys(Credentials.DiawiPassword)
 
-        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginButton)))
-        self.driver.find_element(By.XPATH, SeleniumXpaths.LoginButton).click()
+            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginButton)))
+            self.driver.find_element(By.XPATH, SeleniumXpaths.LoginButton).click()
 
         self.driver.get(WebsiteLink.Diawi)
 

@@ -6,6 +6,7 @@ from SkypeService import SkypeService
 from DiawiService import DiawiService
 from Constants import OS, PathConstants
 from reusableFunctions import jarvis_init
+from Credentials import Credentials
 
 def jarvis_build(directory_path, build_type, sendToWhom, skypeService:SkypeService, diawiService:DiawiService): 
     try:
@@ -21,7 +22,7 @@ def jarvis_build(directory_path, build_type, sendToWhom, skypeService:SkypeServi
             package_path = os.path.join(android_path, PathConstants.AndroidPathAPK)
             package_size = os.path.getsize(package_path) / (1024 * 1024)
 
-            if package_size < 250:
+            if package_size < (250 if Credentials.HasDiawiAccount else 50):
                 print("Uploading build to Diawi...")
                 diawiService.UploadToDiawi(sendToWhom, package_path, directory_path, skypeService)
             else:

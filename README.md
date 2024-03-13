@@ -2,11 +2,27 @@
 
 Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mobile applications and sending them to your teammates using Skype
 
-## Pre Requisites for Installation
+## Pre-Requisites for Installation
 
 - Python 3
 - ChromeDriver
 - Powershell 7
+
+## Getting Started
+
+- After Cloning the project, run the Install.py file to install all required packages
+- Create a Credentials.py File and structure it as follows
+
+```py
+class Credentials:
+    SkypeUserName = "Your Skype UserName"
+    SkypePassword = "Your Skype Password"
+    HasDiawiAccount = False
+    DiawiEmail = ""
+    DiawiPassword = ""
+```
+
+- In the Constants.py file, replace the content in Constants.py according to your needs
 
 ## Configuration
 
@@ -43,7 +59,7 @@ function Get-FileNames {
 function Get-FileNamesCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
-    $directory = 'E:\Personal Programming'
+    $directory = 'Your Directory Path Goes Here'
 
     $files = Get-FileNames -DirectoryPath $directory
 
@@ -67,7 +83,7 @@ Function init {
 	$namesToSend
     )
 
-    $scriptPath = "E:\Personal Programming\Jarvis\a.py"
+    $scriptPath = "Your Directory Path\Jarvis\jarvis_build.py"
     $arguments = "$directoryName $type $namesToSend"
 
     Invoke-Expression "python `"$scriptPath`" $arguments"
@@ -88,7 +104,7 @@ Copy the main directory location of your project and put in the PATH Environment
 
 ## Support
 
-Jarvis is a something we do in our spare time around our day job, friends, and other hobbies. That means support is "when we get to it". We recognize that sometimes this isn't good enough, especially if you have a production issue. To that end, We [offer paid support and bugfixes](syedaashirraza123@gmail.com)(musavirrizvi349@gmail.com). A few basic rules before you contact me:
+Jarvis is a something we do in our spare time around our day job, friends, and other hobbies. That means support is "when we get to it". We recognize that sometimes this isn't good enough, especially if you have a production issue. To that end, We [offer paid support and bugfixes](syedaashirraza@gmail.com). A few basic rules before you contact me:
 
 - Changes made to Jarvis are open source.
 - We reserve the right to make any changes we desire to the codebase.
