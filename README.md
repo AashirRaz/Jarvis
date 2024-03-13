@@ -22,7 +22,7 @@ class Credentials:
     DiawiPassword = ""
 ```
 
-- In the Constants.py file, replace the content in Constants.py according to your needs
+- In the Constants.py file, replace the content in PathConstants and SystemPaths according to your requirements
 
 ## Configuration
 
