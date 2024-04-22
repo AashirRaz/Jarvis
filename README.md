@@ -5,7 +5,7 @@ Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mob
 ## Pre-Requisites for Installation
 
 - Python 3
-- ChromeDriver
+- ChromeDriver https://chromedriver.chromium.org/downloads
 - Powershell 7
 
 ## Getting Started
@@ -22,7 +22,19 @@ class Credentials:
     DiawiPassword = ""
 ```
 
-- In the Constants.py file, replace the content in PathConstants and SystemPaths according to your requirements
+- In the Constants.py file replace the following data
+
+```py
+class PathConstants:
+    BasePath = r"{Your directory containing all your projects goes here}"
+    AndroidPathAPK = r"app/build/outputs/apk/release/app-release.apk" if OS.IOS else r"app\build\outputs\apk\release\app-release.apk"
+    AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
+    IconPath = r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
+
+
+class SystemPaths:
+    ImageFolderPath = r"{Path to folder where you want to store temporary Diawi QR Screenshots}"
+```
 
 ## Configuration
 
@@ -96,11 +108,45 @@ Save the Notepad file and Restart your terminal to Save Changes
 
 Copy the main directory location of your project and put in the PATH Environment Variable
 
+### MacOS
+
+Open your terminal and Enter the following code into your terminal
+
+```zsh
+cd ~
+```
+
+Then enter this, your Bash Profile with open inside of a text editor
+
+```zsh
+nano ~/.bash_profile
+```
+
+OR if you dont have Bash Profile
+
+```zsh
+nano ~/.zshrc
+```
+
+Enter this into your bash_profile
+
+```zsh
+alias jarvis_build="python3 {Path to your python file}"
+```
+
+Save changes to your file and exit the text editor
+
+Enter the following into your Terminal to save the changes
+
+```zsh
+source ~/.bash_profile
+```
+
 ## Contributing
 
-- [Submit a bug report or issue](<https://github.com/AashirRaz/Jarvis/wiki/Filing-a-(good)-bug-report>)
-- [Contribute code by submitting a pull request](<https://github.com/AashirRaz/Jarvis/wiki/Contributing-a-(good)-pull-request>)
-- [Ask a question](https://github.com/AashirRaz/Jarvis/issues)
+- [Submit a bug report or issue](mailto:syedaashirraza@gmail.com)
+- [Contribute code by submitting a pull request](mailto:syedaashirraza@gmail.com)
+- [Ask a question](mailto:syedaashirraza@gmail.com)
 
 ## Support
 
