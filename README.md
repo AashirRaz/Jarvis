@@ -1,14 +1,14 @@
-# JARVIS
+# JARVIS 🤖
 
 Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mobile applications and sending them to your teammates using Skype
 
-## Pre-Requisites for Installation
+## Pre-Requisites for Installation 🛠️
 
 - Python 3
-- ChromeDriver https://chromedriver.chromium.org/downloads
+- ChromeDriver https://chromedriver.chromium.org/downloads (MacOS Setup Mentioned Below)
 - Powershell 7
 
-## Getting Started
+## Getting Started 🚀
 
 - After Cloning the project, run the Install.py file to install all required packages
 - Create a Credentials.py File and structure it as follows
@@ -36,11 +36,12 @@ class SystemPaths:
     ImageFolderPath = r"{Path to folder where you want to store temporary Diawi QR Screenshots}"
 ```
 
-## Configuration
+## Configuration ⚙️
 
 ### Windows
 
-Open your Terminal as Administrator and enter the following code into your terminal
+1. Open your Terminal as Administrator
+2. Enter the following code into your terminal
 
 ```ps1
 notepad $PROFILE
@@ -110,6 +111,10 @@ Copy the main directory location of your project and put in the PATH Environment
 
 ### MacOS
 
+1. Install Chromedriver and paste it into /usr/local/bin.
+2. If you cant find the path, press command+shift+G and type the path in the search box.
+3. Open the file in terminal once to register it with your Mac.
+
 Open your terminal and Enter the following code into your terminal
 
 ```zsh
@@ -142,13 +147,13 @@ Enter the following into your Terminal to save the changes
 source ~/.bash_profile
 ```
 
-## Contributing
+## Contributing 🤝
 
 - [Submit a bug report or issue](mailto:syedaashirraza@gmail.com)
 - [Contribute code by submitting a pull request](mailto:syedaashirraza@gmail.com)
 - [Ask a question](mailto:syedaashirraza@gmail.com)
 
-## Support
+## Support 🛡️
 
 Jarvis is a something we do in our spare time around our day job, friends, and other hobbies. That means support is "when we get to it". We recognize that sometimes this isn't good enough, especially if you have a production issue. To that end, We [offer paid support and bugfixes](syedaashirraza@gmail.com). A few basic rules before you contact me:
 
