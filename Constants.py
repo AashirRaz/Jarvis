@@ -6,7 +6,7 @@ class OS:
     WINDOWS = platform == "win32"
     LINXUS = platform == "linux"
 class PathConstants:
-    BasePath = r"/Users/aashirraza/Desktop/Tests"
+    BasePath = r"/Users/aashirraza/Desktop/Koderlabs"
     AndroidPathAPK = r"app/build/outputs/apk/release/app-release.apk" if OS.IOS else r"app\build\outputs\apk\release\app-release.apk"
     AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
     IconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"

@@ -30,7 +30,7 @@ class SkypeService:
         appIcon = path.split("build")[0]+PathConstants.IconPath
         notification("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", appIcon, path)
 
-    def sendMessagesInParallel(contact, path, message, image=False):
+    def sendMessagesInParallel(self, contact, path, message, image=False):
         extension = path.split(".")[1]
         ch = sk.contacts[contact["id"]].chat
         ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
