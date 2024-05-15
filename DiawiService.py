@@ -52,6 +52,8 @@ class DiawiService():
         link = self.driver.find_element(By.XPATH, SeleniumXpaths.UrlLinkElement).text
         image = self.driver.find_element(By.XPATH, SeleniumXpaths.ImageElementXpath)
 
+        print("Apk Uploaded: ")
+
         src = ''
         while src == '':
             src = image.get_attribute('src')
@@ -63,7 +65,10 @@ class DiawiService():
             shutil.copyfileobj(response.raw, out_file)
         del response
 
+        print("Image Path: ------>")
+
         try:
+            print("Sending message to skype")
             skypeService.SendMsgToSkype(full_name, SystemPaths.ImageFolderPath, f"{message} Diawi Link: {link}", image=True)
             os.remove(SystemPaths.ImageFolderPath)
 
