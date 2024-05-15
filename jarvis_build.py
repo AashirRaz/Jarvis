@@ -1,8 +1,10 @@
 import sys
 from SkypeService import SkypeService
 from DiawiService import DiawiService
-# from android_build import android_build
+from android_build import android_build
 from user_input_handler import HandleUserInput
+from ios_build import ios_build
+from Constants import OS, BuildPlatforms
 
 if __name__ == "__main__":
     skypeService = SkypeService()
@@ -28,17 +30,19 @@ if __name__ == "__main__":
 
     print("-------> Executing Your Command", sys.argv)
 
-    # directory_path = sys.argv[1]
-    # build_type = sys.argv[2]
+    result = HandleUserInput(skypeService.getContacts()) if len(sys.argv) < 1 else sys.argv
 
-    result = HandleUserInput(skypeService.getContacts())
+    directory_path = result[0]
+    build_type = result[2]
+    sendToWhom = result[3:]
 
-    sendToWhom = result[1:]
-    for contact in sendToWhom:
-        skypeService.sendMessagesInParallel(contact, "", "Hola", False)
-
-
-
-    # android_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
+    match build_type:
+        case BuildPlatforms.Android:
+            android_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
+        case BuildPlatforms.IOS:
+            ios_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
+        case BuildPlatforms.Both:
+            android_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
+            ios_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
 
 

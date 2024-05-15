@@ -3,6 +3,8 @@ from reusableFunctions import jarvis_init
 from Credentials import Credentials
 import os
 import subprocess
+from SkypeService import SkypeService
+from DiawiService import DiawiService
 
 def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeService, diawiService:DiawiService): 
     try:

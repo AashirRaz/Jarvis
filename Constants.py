@@ -34,3 +34,8 @@ class WebsiteLink:
 
 class LoadingState:
     Completed = "100%"
+
+class BuildPlatforms:
+    Android = "Android"
+    IOS = "IOS"
+    Both = "Both"

@@ -31,11 +31,11 @@ class SkypeService:
         notification("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", appIcon, path)
 
     def sendMessagesInParallel(self, contact, path, message, image=False):
-        # extension = path.split(".")[1]
+        extension = path.split(".")[1]
         contactId = list(self.conversations.keys())[list(self.conversations.values()).index(contact)]
         print(contactId)
         ch = sk.chats.chat(contactId)
-        # ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
+        ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
         ch.sendMsg(message)
 
 
