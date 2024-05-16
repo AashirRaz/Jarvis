@@ -24,6 +24,7 @@ __all__ = [
     "urllib3>=2.2.1",
     "wheel>=0.42.0",
     "wsproto>=1.2.0",
+    "inquirer>=3.2.4"
 ]
 
 windows = ["win11toast>=0.34"]
