@@ -1,15 +1,12 @@
 from install import install, __all__, darwin, windows
+from Constants import OS, BuildPlatforms
 from SkypeService import SkypeService
 from DiawiService import DiawiService
 from android_build import android_build
 from user_input_handler import HandleUserInput
 from ios_build import ios_build
-from Constants import OS, BuildPlatforms
 
 if __name__ == "__main__":
-    install(__all__)
-    install(darwin if OS.IOS else windows)
-    
     skypeService = SkypeService()
     diawiService = DiawiService()
 

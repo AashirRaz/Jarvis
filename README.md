@@ -10,7 +10,12 @@ Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mob
 
 ## Getting Started 🚀
 
-- After Cloning the project, run the Install.py file to install all required packages
+- After Cloning the project, run the following command to install all required packages
+
+```bash
+pip install -r requirements.txt
+```
+
 - Create a Credentials.py File and structure it as follows
 
 ```py
@@ -56,50 +61,10 @@ New-Item -Path $PROFILE -ItemType File -Force
 Paste the below code into your notepad file
 
 ```ps1
-function Get-FileNames {
-    param (
-        [string]$DirectoryPath
-    )
-
-    Set-Location -Path $DirectoryPath
-
-    $files = Get-ChildItem -Directory
-
-    # Output the names of the files
-    $files | ForEach-Object { "'$($_.Name)'" }
-}
-
-function Get-FileNamesCompleter {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-
-    $directory = 'Your Directory Path Goes Here'
-
-    $files = Get-FileNames -DirectoryPath $directory
-
-    $files | Where-Object { $_ -like "$wordToComplete*" }
-}
-
-
 Function init {
-    [CmdletBinding()]
-    param (
-	[Parameter(Mandatory)]
-	[ArgumentCompleter({ Get-FileNamesCompleter @args })]
-        [string]$directoryName,
-
-	[Parameter(Mandatory=$true)]
-	[ValidateSet('release', 'bundle')]
-	$type,
-
-	[Parameter(Mandatory)]
-        [string[]]
-	$namesToSend
-    )
-
     $scriptPath = "Your Directory Path\Jarvis\jarvis_build.py"
-    $arguments = "$directoryName $type $namesToSend"
 
-    Invoke-Expression "python `"$scriptPath`" $arguments"
+    Invoke-Expression "python `"$scriptPath`""
 }
 
 Set-Alias -Name jarvis_build -Value init
