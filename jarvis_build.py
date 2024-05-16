@@ -28,15 +28,16 @@ if __name__ == "__main__":
             JG&@@@@&B?  G&##BGG~   :#@&#BBP &&#BP5~    .GB5J!^:  @@@&&#BBG5. 7@@&&##7   7P#@@@@@@&B57   
     """)
 
-    print("-------> Executing Your Command", sys.argv)
+    print("-------> Executing Your Command")
 
-    result = HandleUserInput(skypeService.getContacts()) if len(sys.argv) < 1 else sys.argv
+    result = HandleUserInput(skypeService.getContacts())
 
     directory_path = result[0]
+    platform = result[1]
     build_type = result[2]
     sendToWhom = result[3:]
 
-    match build_type:
+    match platform:
         case BuildPlatforms.Android:
             android_build(directory_path, build_type, sendToWhom, skypeService, diawiService)
         case BuildPlatforms.IOS:

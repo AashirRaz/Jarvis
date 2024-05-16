@@ -1,5 +1,5 @@
 import inquirer
-from inquirer.themes import GreenPassion, BlueComposure
+from inquirer.themes import BlueComposure
 from Constants import PathConstants, OS, BuildPlatforms
 import os
 
@@ -14,11 +14,19 @@ def getFolderNames() -> list[str]:
 def HandleUserInput(skypeContacts:list[str]) -> list[str]:
     questions = []
     result = []
+    reactNativeFolders = ["android", "ios", "src"]
+    current_directory = os.getcwd()
+    project_name = current_directory.split('/')[-1]
 
-    questions.append(inquirer.List("DirectoryPath", message="Which application do you want to compile?",choices=getFolderNames())),
+    inDirectory = not all(os.path.exists(os.path.join(current_directory, f)) for f in reactNativeFolders)
+
+    if inDirectory:
+        questions.append(inquirer.List("DirectoryPath", message="Which application do you want to compile?",choices=getFolderNames()))
+    else:
+        result.append(current_directory)
 
     if(OS.IOS):
-        questions.append(inquirer.List("Platform", message="For which platform do you want to build", choices=[BuildPlatforms.Android, BuildPlatforms.IOS, BuildPlatforms.Both], default="Both")) 
+        questions.append(inquirer.List("Platform", message="For which platform do you want to build. (Press <space> to select, <a> to toggle all, <i> to invert selection)", choices=[BuildPlatforms.Android, BuildPlatforms.IOS, BuildPlatforms.Both], default="Both")) 
 
     questions.append(inquirer.List("BuildType", message="Which build type do you want to build", choices=["bundle", "release"], default="bundle"))
         
@@ -28,7 +36,9 @@ def HandleUserInput(skypeContacts:list[str]) -> list[str]:
 
     ans = inquirer.prompt(questions, theme=BlueComposure())
 
-    result.append(ans.get("DirectoryPath"))
+    if inDirectory:
+        result.append(ans.get("DirectoryPath"))
+
     if(OS.IOS):
         result.append(ans.get("Platform"))
     else:
@@ -40,5 +50,3 @@ def HandleUserInput(skypeContacts:list[str]) -> list[str]:
         result.append(contact)
 
     return result
-
-
