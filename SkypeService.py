@@ -24,11 +24,13 @@ class SkypeService:
     def SendMsgToSkype(self, full_name, path, message, image=False):
         contacts = filter_by_full_name(self.getContacts(), full_name)
 
-        for contact in self.getContacts():
+
+        for contact in contacts:
+            print(contact)
             threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message, image)).start()
 
         appIcon = path.split("build")[0]+PathConstants.IconPath
-        notification("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact['name'] for contact in contacts]} via Skype Succesfully...", appIcon, path)
+        notification("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact for contact in contacts]} via Skype Succesfully...", appIcon, path)
 
     def sendMessagesInParallel(self, contact, path, message, image=False):
         extension = path.split(".")[1]

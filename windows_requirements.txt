@@ -31,4 +31,3 @@ win11toast==0.34
 winsdk==1.0.0b10
 wsproto==1.2.0
 xmod==1.8.1
-macos-notifications==0.2.0

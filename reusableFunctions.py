@@ -30,11 +30,11 @@ def notification(title: str, subtitle: str, icon: str, path: str) -> None:
         toast(title, subtitle, icon=icon, duration=10, image=path, on_click=path)
 
 
-def filter_by_full_name(skypeContacts:list[object], full_names: list[str]) -> list[object]:
+def filter_by_full_name(skypeContacts:list[str], full_names: list[str]) -> list[object]:
     filtered_objects = []
     for contact in skypeContacts:
         for name in full_names:
-            if contact["name"].lower() == name.lower():
+            if contact.lower() == name.lower():
                 filtered_objects.append(contact)
 
     return filtered_objects

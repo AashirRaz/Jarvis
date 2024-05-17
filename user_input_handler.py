@@ -23,18 +23,18 @@ def HandleUserInput(skypeContacts:list[str]) -> list[str]:
     if inDirectory:
         questions.append(inquirer.List("DirectoryPath", message="Which application do you want to compile?",choices=getFolderNames()))
     else:
-        result.append(current_directory)
+        result.append(project_name)
 
     if(OS.IOS):
-        questions.append(inquirer.List("Platform", message="For which platform do you want to build. (Press <space> to select, <a> to toggle all, <i> to invert selection)", choices=[BuildPlatforms.Android, BuildPlatforms.IOS, BuildPlatforms.Both], default="Both")) 
+        questions.append(inquirer.List("Platform", message="For which platform do you want to build.", choices=[BuildPlatforms.Both, BuildPlatforms.Android, BuildPlatforms.IOS], default="Both")) 
 
-    questions.append(inquirer.List("BuildType", message="Which build type do you want to build", choices=["bundle", "release"], default="bundle"))
+    questions.append(inquirer.List("BuildType", message="Which build type do you want to build", choices=["release","bundle"], default="release"))
         
     questions.append(inquirer.Checkbox(
-            "SkypeContacts", message="Select Skype Contacts to send application to", choices=skypeContacts
+            "SkypeContacts", message="Select Skype Contacts to send application to  (Press <space> to select, <tab> to toggle all", choices=skypeContacts
         )),
 
-    ans = inquirer.prompt(questions, theme=BlueComposure())
+    ans = inquirer.prompt(questions)
 
     if inDirectory:
         result.append(ans.get("DirectoryPath"))

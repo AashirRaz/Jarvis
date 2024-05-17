@@ -28,6 +28,7 @@ class Settings:
 
 class SystemPaths:
     ImageFolderPath = r"/Users/aashirraza/Desktop/Tests/Jarvis/temp/app_qrcode.png"
+    ImageDirectoryPath = r"/Users/aashirraza/Desktop/Tests/Jarvis/temp"
 
 class WebsiteLink:
     Diawi = "https://www.diawi.com/"

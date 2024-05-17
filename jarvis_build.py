@@ -1,4 +1,3 @@
-from install import install, __all__, darwin, windows
 from Constants import OS, BuildPlatforms
 from SkypeService import SkypeService
 from DiawiService import DiawiService
@@ -27,8 +26,6 @@ if __name__ == "__main__":
             Y@@@@@@@@@P ~@@@@@@B    G@@@@@@ P@@@@@B   J@@@@@@5   t@@@@@@@@@? .B@@@@@G  #@@@@@@@@@@@@@&Y 
             JG&@@@@&B?  G&##BGG~   :#@&#BBP &&#BP5~    .GB5J!^:  @@@&&#BBG5. 7@@&&##7   7P#@@@@@@&B57   
     """)
-
-    print("-------> Executing Your Command")
 
     result = HandleUserInput(skypeService.getContacts())
 

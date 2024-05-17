@@ -61,6 +61,9 @@ class DiawiService():
 
         response = requests.get(url, stream=True)
 
+        if not os.path.exists(SystemPaths.ImageDirectoryPath):
+            os.mkdir(SystemPaths.ImageDirectoryPath)
+
         with open(SystemPaths.ImageFolderPath, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response

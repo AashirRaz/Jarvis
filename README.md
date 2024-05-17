@@ -12,8 +12,16 @@ Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mob
 
 - After Cloning the project, run the following command to install all required packages
 
+#### On Windows
+
 ```bash
-pip install -r requirements.txt
+pip install -r windows_requirements.txt
+```
+
+#### On MacOS
+
+```bash
+pip install -r mac_requirements.txt
 ```
 
 - Create a Credentials.py File and structure it as follows
