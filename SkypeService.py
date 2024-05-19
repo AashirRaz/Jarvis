@@ -1,6 +1,6 @@
 from skpy import Skype, chat
 from reusableFunctions import notification
-from Constants import  PathConstants
+from Constants import  PathConstants, OS
 from Credentials import Credentials
 from reusableFunctions import filter_by_full_name
 import threading
@@ -21,7 +21,7 @@ class SkypeService:
             
         self.conversations = {}
 
-    def SendMsgToSkype(self, full_name, path, message, image=False):
+    def SendMsgToSkype(self, full_name, path, message, image=False, name=''):
         contacts = filter_by_full_name(self.getContacts(), full_name)
 
 
@@ -29,14 +29,15 @@ class SkypeService:
             print(contact)
             threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message, image)).start()
 
-        appIcon = path.split("build")[0]+PathConstants.IconPath
+
+        extendedPath = PathConstants.IosIconPath.format(name) if OS.IOS else PathConstants.AndroidIconPath
+        appIcon = path.split("build")[0]+ extendedPath
         notification("Jarvis: App Successfully Sent via Skype", f"Jarvis has successfully built and sent the app to {[contact for contact in contacts]} via Skype Succesfully...", appIcon, path)
 
     def sendMessagesInParallel(self, contact, path, message, image=False):
         extension = path.split(".")[1]
         contactId = list(self.conversations.keys())[list(self.conversations.values()).index(contact)]
-        print(contactId)
-        ch = sk.chats.chat(contactId)
+        ch:chat.SkypeChat = sk.chats.chat(contactId)
         ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
         ch.sendMsg(message)
 

@@ -21,7 +21,7 @@ class DiawiService():
         chrome_options.add_argument(Settings.IGNORE_CERTIFICATE_ERRORS)
         self.driver = webdriver.Chrome(options=chrome_options)
 
-    def UploadToDiawi(self, full_name, app_path=None, message='', skypeService:SkypeService=None):
+    def UploadToDiawi(self, full_name, app_path=None, message='', skypeService:SkypeService=None, name=''):
         if Credentials.HasDiawiAccount:
             self.driver.get(WebsiteLink.Diawi)
 
@@ -72,7 +72,7 @@ class DiawiService():
 
         try:
             print("Sending message to skype")
-            skypeService.SendMsgToSkype(full_name, SystemPaths.ImageFolderPath, f"{message} Diawi Link: {link}", image=True)
+            skypeService.SendMsgToSkype(full_name, SystemPaths.ImageFolderPath, f"{message} Diawi Link: {link}", image=True, name=name)
             os.remove(SystemPaths.ImageFolderPath)
 
         except:

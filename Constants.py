@@ -9,7 +9,8 @@ class PathConstants:
     BasePath = r"/Users/aashirraza/Desktop/Koderlabs"
     AndroidPathAPK = r"app/build/outputs/apk/release/app-release.apk" if OS.IOS else r"app\build\outputs\apk\release\app-release.apk"
     AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
-    IconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
+    AndroidIconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
+    IosIconPath = r"{0}/Images.xcassets/AppIcon.appiconset/ItunesArtwork@2x.png"
 class SeleniumXpaths:
     LoginPageButton = r"/html/body/header/div/div[2]/div/span[1]/a"
     EmailAddress = r"/html/body/div[1]/div/form/div[2]/input"
