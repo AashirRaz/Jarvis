@@ -3,10 +3,10 @@ import os
 import subprocess
 import sys
 from Constants import OS
-from reusableFunctions import jarvis_init, writeJarvisArt
+from reusableFunctions import jarvis_init, jarvis_logo
 
 if __name__ == "__main__":
-    writeJarvisArt()
+    jarvis_logo()
 
     directory_path = sys.argv[1]
 

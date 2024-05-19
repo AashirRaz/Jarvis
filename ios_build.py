@@ -69,12 +69,12 @@ def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeServ
                 schemes = extract_schemes(result.stdout)
 
                 # Archive the project
-                archive_command = f"xcodebuild -workspace {files.get("workspace")} -scheme {schemes[0]} -configuration 'Release' -sdk iphoneos archive -archivePath ${{PWD}}/build/{name}.xcarchive"
+                archive_command = f"xcodebuild -workspace {files.get('workspace')} -scheme {schemes[0]} -configuration 'Release' -sdk iphoneos archive -archivePath ${{PWD}}/build/{name}.xcarchive"
                 print(archive_command)
                 subprocess.run(archive_command, check=True, shell=True)
 
                 # Export the archive
-                export_options_plist = '/Users/aashirraza/Desktop/Tests/Jarvis/exportOption.plist'
+                export_options_plist = 'exportOption.plist'
                 shutil.copy(export_options_plist, ios_path)
                 
                 export_command = f"xcodebuild -exportArchive -archivePath ${{PWD}}/build/{name}.xcarchive -exportOptionsPlist exportOption.plist -exportPath ${{PWD}}/build/{name}Build"
