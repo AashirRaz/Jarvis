@@ -27,7 +27,6 @@ def notification(title: str, subtitle: str, icon: str, path: str) -> None:
         )
         time.sleep(5)
         client.stop_listening_for_callbacks()
-        
     elif (OS.WINDOWS):
         from win11toast import toast
         toast(title, subtitle, icon=icon, duration=10, image=path, on_click=path)

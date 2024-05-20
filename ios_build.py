@@ -35,13 +35,11 @@ def find_ios_required_folder(directory_path: str):
                 result["workspace"] = item
     return result
 
-def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeService, diawi_service: DiawiService):
+def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeService):
     # Initiates the build process for iOS or Android based on the build type.
     try:
-        full_path = jarvis_init(directory_path)
-
         # Change to the "ios" directory
-        ios_path = os.path.join(full_path, "ios")
+        ios_path = os.path.join(directory_path, "ios")
         os.chdir(ios_path)
 
         if build_type == "release":
@@ -89,7 +87,8 @@ def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeServ
 
                 if package_size < (250 if Credentials.HasDiawiAccount else 50):
                     print("Uploading build to Diawi...")
-                    diawi_service.UploadToDiawi(send_to_whom, package_path, f"{directory_path} IPA", skype_service, name=name)
+                    diawiService = DiawiService()
+                    diawiService.UploadToDiawi(send_to_whom, package_path, f"{directory_path} IPA", skype_service, name=name)
                 else:
                     print('Package size is too large to upload to Diawi')
                     skype_service.SendMsgToSkype(send_to_whom, package_path, f"{directory_path} build")

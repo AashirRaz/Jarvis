@@ -6,12 +6,10 @@ import subprocess
 from SkypeService import SkypeService
 from DiawiService import DiawiService
 
-def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeService, diawiService:DiawiService): 
+def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeService): 
     try:
-        full_path:str = jarvis_init(directory_path)
-
         # Change to the "android" directory
-        android_path = os.path.join(full_path, "android")
+        android_path = os.path.join(directory_path, "android")
         os.chdir(android_path)
 
         if build_type == "release":
@@ -26,6 +24,7 @@ def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeServ
 
             if package_size < (250 if Credentials.HasDiawiAccount else 50):
                 print("Uploading build to Diawi...")
+                diawiService = DiawiService()
                 diawiService.UploadToDiawi(sendToWhom, package_path, f"{directory_path} Apk", skypeService)
             else:
                 print('Package size is too large to upload to Diawi')

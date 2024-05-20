@@ -6,12 +6,11 @@ from build_handler import create_build
 
 if __name__ == "__main__":
     skypeService = SkypeService()
-    diawiService = DiawiService()
 
     jarvis_logo()
 
     result = HandleUserInput(skypeService.getContacts())
 
-    create_build(result, skypeService, diawiService)
+    create_build(result, skypeService)
 
 
