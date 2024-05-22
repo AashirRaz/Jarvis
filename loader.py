@@ -38,7 +38,7 @@ class Loader:
             self.terminate()
             self.thread = None
             os.system('cls' if os.name == 'nt' else 'clear')
-            print("\n" + message)
+            print(message)
             return True
         else:
             sys.stdout.write("%s thread not started." % str(self))
@@ -61,3 +61,10 @@ class Loader:
         else:
             raise ValueError("No thread to terminate")
 
+
+
+loader = Loader()
+
+loader.start("1/4", "Making release build")
+time.sleep(5)
+loader.stop("Successfully made release build")
