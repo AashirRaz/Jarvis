@@ -11,6 +11,7 @@ import traceback
 import os
 from Constants import Settings, SeleniumXpaths, SystemPaths, WebsiteLink, LoadingState
 from Credentials import Credentials
+from loader import Loader
  
 class DiawiService():
     driver = None
@@ -22,6 +23,8 @@ class DiawiService():
         self.driver = webdriver.Chrome(options=chrome_options)
 
     def UploadToDiawi(self, full_name, app_path=None, message='', skypeService:SkypeService=None, name=''):
+        loader = Loader()
+        loader.start(1/4, "Uploading to Diawi")
         if Credentials.HasDiawiAccount:
             self.driver.get(WebsiteLink.Diawi)
 
@@ -52,8 +55,6 @@ class DiawiService():
         link = self.driver.find_element(By.XPATH, SeleniumXpaths.UrlLinkElement).text
         image = self.driver.find_element(By.XPATH, SeleniumXpaths.ImageElementXpath)
 
-        print("Apk Uploaded: ")
-
         src = ''
         while src == '':
             src = image.get_attribute('src')
@@ -68,7 +69,7 @@ class DiawiService():
             shutil.copyfileobj(response.raw, out_file)
         del response
 
-        print("Image Path: ------>")
+        loader.stop("Uploaded to Diawi")
 
         try:
             print("Sending message to skype")

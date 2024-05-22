@@ -9,7 +9,7 @@ def handlePress(path:str) -> None:
         import subprocess
         localPath = '/'.join(path.split("/")[:-1])
         print(localPath)
-        subprocess.run([f"open {localPath}"], shell=True, check=True)
+        subprocess.run([f"open {localPath}"], check=True)
     elif (OS.WINDOWS):
         import os
         os.startfile(path)

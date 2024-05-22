@@ -12,13 +12,13 @@ def create_build(result:list[str], skypeService:SkypeService) -> None:
     build_type = result[2]
     sendToWhom = result[3:]
 
-    # match platform:
-    #     case BuildPlatforms.Android:
-    #         android_build(directory_path, build_type, sendToWhom, skypeService)
-    #     case BuildPlatforms.IOS:
-    #         ios_build(directory_path, build_type, sendToWhom, skypeService)
-    #     case BuildPlatforms.Both:
-            # multithreaded_build(directory_path, build_type, sendToWhom, skypeService)
+    match platform:
+        case BuildPlatforms.Android:
+            android_build(directory_path, build_type, sendToWhom, skypeService)
+        case BuildPlatforms.IOS:
+            ios_build(directory_path, build_type, sendToWhom, skypeService)
+        case BuildPlatforms.Both:
+            multithreaded_build(directory_path, build_type, sendToWhom, skypeService)
 
     iosPath = os.path.join(directory_path, "ios" if platform == BuildPlatforms.IOS else "android")
     files = find_ios_required_folder(iosPath)

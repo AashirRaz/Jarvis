@@ -1,4 +1,5 @@
 from skpy import Skype, chat
+from loader import Loader
 from reusableFunctions import notification
 from Constants import  PathConstants, OS
 from Credentials import Credentials
@@ -22,10 +23,14 @@ class SkypeService:
         self.conversations = {}
 
     def SendMsgToSkype(self, full_name, path, message, image=False, name=''):
+        loader = Loader()
+        loader.start("3/4", "Sending message to skype")
         contacts = filter_by_full_name(self.getContacts(), full_name)
 
         for contact in contacts:
             threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message, image)).start()
+
+        loader.stop("Successfully sent message to skype")
     def sendMessagesInParallel(self, contact, path, message, image=False):
         extension = path.split(".")[1]
         contactId = list(self.conversations.keys())[list(self.conversations.values()).index(contact)]

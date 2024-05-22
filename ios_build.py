@@ -1,3 +1,4 @@
+from loader import Loader
 from reusableFunctions import jarvis_init, notification
 from Credentials import Credentials
 import os
@@ -38,12 +39,13 @@ def find_ios_required_folder(directory_path: str):
 def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeService):
     # Initiates the build process for iOS or Android based on the build type.
     try:
+        loader = Loader()
         # Change to the "ios" directory
         ios_path = os.path.join(directory_path, "ios")
         os.chdir(ios_path)
 
         if build_type == "release":
-            print("Making release build...", ios_path)
+            loader.start("1/4" ,"Making release build" + ios_path)
 
             # Remove .xcode.env.local file if exists
             xcode_env_local_path = os.path.join(ios_path, ".xcode.env.local")
@@ -69,7 +71,7 @@ def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeServ
                 # Archive the project
                 archive_command = f"xcodebuild -workspace {files.get('workspace')} -scheme {schemes[0]} -configuration 'Release' -sdk iphoneos archive -archivePath ${{PWD}}/build/{name}.xcarchive"
                 print(archive_command)
-                subprocess.run(archive_command, check=True, shell=True)
+                subprocess.run(archive_command, check=True)
 
                 # Export the archive
                 export_options_plist = 'exportOption.plist'
@@ -77,16 +79,16 @@ def ios_build(directory_path, build_type, send_to_whom, skype_service: SkypeServ
                 
                 export_command = f"xcodebuild -exportArchive -archivePath ${{PWD}}/build/{name}.xcarchive -exportOptionsPlist exportOption.plist -exportPath ${{PWD}}/build/{name}Build"
 
-                subprocess.run(export_command, check=True, shell=True)
+                subprocess.run(export_command, check=True)
                 os.remove(os.path.join(ios_path, 'exportOption.plist'))
 
                 # Determine package size and upload to Diawi if appropriate
                 package_path = os.path.join(ios_path, f"build/{name}Build/{name}.ipa")
                 package_size = os.path.getsize(package_path) / (1024 * 1024)
-                print("Package size:", package_size, "MB")
-
+                
+                loader.stop(f"Package size: {package_size} MB")
+                
                 if package_size < (250 if Credentials.HasDiawiAccount else 50):
-                    print("Uploading build to Diawi...")
                     diawiService = DiawiService()
                     diawiService.UploadToDiawi(send_to_whom, package_path, f"{directory_path} IPA", skype_service, name=name)
                 else:

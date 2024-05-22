@@ -5,16 +5,19 @@ import os
 import subprocess
 from SkypeService import SkypeService
 from DiawiService import DiawiService
+from loader import Loader
 
 def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeService): 
     try:
+        loader = Loader()
+        loader.start("1/4", "Android Build")
         # Change to the "android" directory
         android_path = os.path.join(directory_path, "android")
         os.chdir(android_path)
 
         if build_type == "release":
             
-            subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], shell=True, check=True)
+            subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], check=True)
 
             # Determine the package size
             package_path = os.path.join(android_path, PathConstants.AndroidPathAPK)
@@ -33,8 +36,9 @@ def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeServ
         if build_type == "bundle":
             print("Making bundle build...")
 
-            subprocess.run(["./gradlew bundleRelease"] if OS.IOS else ["gradlew", "bundleRelease"], shell=True, check=True)
+            subprocess.run(["./gradlew bundleRelease"] if OS.IOS else ["gradlew", "bundleRelease"], check=True)
             package_path = os.path.join(android_path, PathConstants.AndroidPathBundle)
             skypeService.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
+        loader.stop()
     except:
         pass

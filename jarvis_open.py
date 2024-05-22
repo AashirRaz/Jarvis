@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
     jarvis_init(directory_path)
 
-    subprocess.run(["code ."] if OS.IOS else ["code", "."], shell=True, check=True)
+    subprocess.run(["code ."] if OS.IOS else ["code", "."],check=True)
     

@@ -1,66 +1,63 @@
+import ctypes
 import os
 import time
 from threading import Thread
+from loaders import SpinningLoader
+import sys
 
 class Loader:
     def __init__(self) -> None:
-        self.state = False
+        self.thread = None
 
     def start(self, stepCount, message):
-        self.state = True
+        if not self.thread:
+            thread = Thread(target=self.printLoader, args=(stepCount, message))
+            thread.daemon = True
+            self.thread = thread
+            self.thread.start()
+            return True
+        else:
+            return False
+        
+    def printLoader(self, stepCount, message):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(stepCount + " " + message, end='')
-        while self.state:
-            count = 0
+        count = 0
+        while True:
             while count <= 3:
                 time.sleep(1)
                 print('.', end='', flush=True)
                 count += 1
-
             count = 0
             os.system('cls' if os.name == 'nt' else 'clear')
             print(stepCount + " " + message, end='')
 
-    def loader_stop(self, message:str) -> None:
-        self.state = False
-        print(message)
-    
 
+    def stop(self, message:str) -> None:
+        if self.thread:
+            self.terminate()
+            self.thread = None
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("\n" + message)
+            return True
+        else:
+            sys.stdout.write("%s thread not started." % str(self))
+            return False
 
-
-
-
-
-loader = Loader()
-
-
-startLoader = Thread(target=loader.start, args=("1/4", "Complete!"))
-stoploader = Thread(target=loader.loader_stop, args=("Complete!"))
-
-startLoader.start()
-time.sleep(5)
-stoploader.start()
-
-
-
-
-
-
-
-
-
-
-# timer = 0
-# loading = "Loading: [----------]"
-# backtrack = '\b'*len(loading)
-
-# while timer < 11:
-#     sys.stdout.write(backtrack + loading)
-#     sys.stdout.flush()
-#     loading = loading.replace("-","=",1)
-#     time.sleep(1)
-#     timer += 1
-# time.sleep(1)
-# sys.stdout.write(backtrack)
-# print (loading+" Complete!")
+    def terminate(self):
+        if self.thread:
+            if not self.thread.is_alive():
+                return
+            exc = ctypes.py_object(SystemExit)
+            res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+                ctypes.c_long(self.thread.ident), exc)
+            if res == 0:
+                raise ValueError("nonexistent thread id")
+            elif res > 1:
+                ctypes.pythonapi.PyThreadState_SetAsyncExc(self.thread.ident, None)
+                raise SystemError("PyThreadState_SetAsyncExc failed")
+            else:
+                return
+        else:
+            raise ValueError("No thread to terminate")
 
