@@ -1,3 +1,4 @@
+from DiawiService import DiawiService
 from SkypeService import SkypeService
 from user_input_handler import HandleUserInput
 from reusableFunctions import jarvis_logo
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     jarvis_logo()
 
     skypeService = SkypeService()
-
+    diawiService = DiawiService(skypeService)
     result = HandleUserInput(skypeService.getContacts())
 
     create_build(result, skypeService)

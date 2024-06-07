@@ -28,12 +28,12 @@ class SkypeService:
 
         stopToast(sp2, "Successfully! Fetched Contacts")
 
-    def SendMsgToSkype(self, full_name, path, message, image=False, name=''):
+    def SendMsgToSkype(self, full_name, path, message):
         contacts = filter_by_full_name(self.getContacts(), full_name)
 
         threads = []
         for contact in contacts:
-            thread = threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message, image))
+            thread = threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message))
             thread.start()
             threads.append(thread)
 

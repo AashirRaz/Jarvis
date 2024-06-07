@@ -12,16 +12,11 @@ class PathConstants:
     AndroidIconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
     IosIconPath = r"{0}/Images.xcassets/AppIcon.appiconset/ItunesArtwork@2x.png"
     IosBuildPath = r'build/{0}Build/{0}.ipa'
-class SeleniumXpaths:
-    LoginPageButton = r"/html/body/header/div/div[2]/div/span[1]/a"
-    EmailAddress = r"/html/body/div[1]/div/form/div[2]/input"
-    Password = r"/html/body/div[1]/div/form/div[3]/input"
-    LoginButton = r"/html/body/div[1]/div/form/div[4]/input"
-    FileUploadXpath = "/html/body/section/section[2]/div[1]/form/div[1]/div[2]/input"
-    LoadingText = "/html/body/section/section[2]/div[1]/form/div[1]/div[1]/div/div/div/ul/li/div[3]"
-    SubmitButtonXpath = "/html/body/section/section[2]/div[1]/form/div[3]/input"
-    UrlLinkElement = r"/html/body/section/section[2]/div[1]/div/div[1]/div[2]/a"
-    ImageElementXpath = r'//*[@id="main-container"]/section[2]/div[1]/div/div[2]/img'
+
+class DiawiUrls:
+    DIAWI_UPLOAD_URL = 'https://upload.diawi.com/'
+    DIAWI_CHECK_STATUS_URL = 'https://upload.diawi.com/status'
+    API_TOKEN = 'h65ZXIeebgo5bA2kH2cmsm2ShOmf7zad4CAZIlxcoA'
 
 class Settings:
     HEADLESSMODE = "--headless"
