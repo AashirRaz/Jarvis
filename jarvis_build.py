@@ -1,13 +1,20 @@
 from SkypeService import SkypeService
-from DiawiService import DiawiService
 from user_input_handler import HandleUserInput
 from reusableFunctions import jarvis_logo
 from build_handler import create_build
+import sys
+from bs4 import MarkupResemblesLocatorWarning
+import warnings
+from yaspin import yaspin
+import time
+
 
 if __name__ == "__main__":
-    skypeService = SkypeService()
-
+    sys.tracebacklimit = 0
+    warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
     jarvis_logo()
+
+    skypeService = SkypeService()
 
     result = HandleUserInput(skypeService.getContacts())
 

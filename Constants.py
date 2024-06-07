@@ -11,6 +11,7 @@ class PathConstants:
     AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
     AndroidIconPath =   r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
     IosIconPath = r"{0}/Images.xcassets/AppIcon.appiconset/ItunesArtwork@2x.png"
+    IosBuildPath = r'build/{0}Build/{0}.ipa'
 class SeleniumXpaths:
     LoginPageButton = r"/html/body/header/div/div[2]/div/span[1]/a"
     EmailAddress = r"/html/body/div[1]/div/form/div[2]/input"

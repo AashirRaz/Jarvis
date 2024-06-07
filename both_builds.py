@@ -2,11 +2,10 @@ from threading import Thread
 from android_build import android_build
 from ios_build import ios_build
 
-def multithreaded_build(directory_path, build_type, send_to_whom, skype_service, diawi_service):
+def multithreaded_build(directory_path, build_type, send_to_whom,files,  skype_service):
     # Initiates the build process for iOS or Android based on the build type.
-    args = (directory_path, build_type, send_to_whom, skype_service, diawi_service)
-    android_thread = Thread(target=android_build, args=args)
-    ios_thread = Thread(target=ios_build, args=args)
+    android_thread = Thread(target=android_build, args=(directory_path, build_type, send_to_whom, skype_service))
+    ios_thread = Thread(target=ios_build, args=(directory_path, build_type, send_to_whom, files, skype_service))
 
     # Start the threads
     android_thread.start()
@@ -17,7 +16,6 @@ def multithreaded_build(directory_path, build_type, send_to_whom, skype_service,
     ios_thread.join()
 
 
-def SingleThreadedBuild(directory_path, build_type, send_to_whom, skype_service, diawi_service):
-    args = (directory_path, build_type, send_to_whom, skype_service, diawi_service)
-    android_build(args)
-    ios_build(args)  
+def SingleThreadedBuild(directory_path, build_type, send_to_whom, files, skype_service):
+    android_build(directory_path, build_type, send_to_whom, skype_service)
+    ios_build(directory_path, build_type, send_to_whom, files, skype_service)  

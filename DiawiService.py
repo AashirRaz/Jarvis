@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -11,71 +12,80 @@ import traceback
 import os
 from Constants import Settings, SeleniumXpaths, SystemPaths, WebsiteLink, LoadingState
 from Credentials import Credentials
-from loader import Loader
+from toast import toast
  
 class DiawiService():
     driver = None
     def __init__(self) -> None:
         chrome_options = Options()
-        chrome_options.add_argument(Settings.HEADLESSMODE)
+        # chrome_options.add_argument(Settings.HEADLESSMODE)
         chrome_options.add_argument(Settings.LOG_LEVEL3)
         chrome_options.add_argument(Settings.IGNORE_CERTIFICATE_ERRORS)
         self.driver = webdriver.Chrome(options=chrome_options)
 
     def UploadToDiawi(self, full_name, app_path=None, message='', skypeService:SkypeService=None, name=''):
-        loader = Loader()
-        loader.start(1/4, "Uploading to Diawi")
-        if Credentials.HasDiawiAccount:
-            self.driver.get(WebsiteLink.Diawi)
+        toast("[7/10]", "Uploading to Diawi...")
+        
+        import requests
+        import time
 
-            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginPageButton)))
-            self.driver.find_element(By.XPATH, SeleniumXpaths.LoginPageButton).click()
+        DIAWI_UPLOAD_URL = 'https://upload.diawi.com/'
+        DIAWI_CHECK_STATUS_URL = 'https://upload.diawi.com/status'
+        API_TOKEN = 'h65ZXIeebgo5bA2kH2cmsm2ShOmf7zad4CAZIlxcoA'
 
-            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.EmailAddress)))
-            self.driver.find_element(By.XPATH, SeleniumXpaths.EmailAddress).send_keys(Credentials.DiawiEmail)
+    def upload_file_to_diawi(self, file_path):
+        files = {'file': open(file_path, 'rb')}
+        data = {
+            'token': API_TOKEN,
+            'wall_of_apps': 0,
+            'comment': 'Uploaded via API'
+        }
 
-            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.Password)))
-            self.driver.find_element(By.XPATH, SeleniumXpaths.Password).send_keys(Credentials.DiawiPassword)
+        response = requests.post(DIAWI_UPLOAD_URL, files=files, data=data)
+        if response.status_code == 200:
+            response_data = response.json()
+            job_id = response_data['job']
+            return job_id
+        else:
+            raise Exception('Failed to upload file: ' + response.text)
 
-            WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.LoginButton)))
-            self.driver.find_element(By.XPATH, SeleniumXpaths.LoginButton).click()
+    def check_upload_status(self, job_id):
+        params = {'token': API_TOKEN, 'job': job_id}
+        response = requests.get(DIAWI_CHECK_STATUS_URL, params=params)
+        if response.status_code == 200:
+            response_data = response.json()
+            return response_data
+        else:
+            raise Exception('Failed to check status: ' + response.text)
 
-        self.driver.get(WebsiteLink.Diawi)
+    def main():
+        file_path = '/Users/aashirraza/Downloads/app-release.apk'  # Replace with your file path
 
-        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, SeleniumXpaths.FileUploadXpath)))
-        self.driver.find_element(By.XPATH, SeleniumXpaths.FileUploadXpath).send_keys(app_path)
+        print('Uploading file to Diawi...')
+        job_id = self.upload_file_to_diawi(file_path)
+        print(f'Job ID: {job_id}')
 
-        #waiting for loading
-        while self.driver.find_element(By.XPATH, SeleniumXpaths.LoadingText).text != LoadingState.Completed:
-            continue
+        while True:
+            status_response = check_upload_status(job_id)
+            status = status_response['status']
 
-        self.driver.find_element(By.XPATH, SeleniumXpaths.SubmitButtonXpath).click()
+            if status == 2000:  # Completed
+                print('Upload completed.')
+                print('Link:', status_response['link'])
+                break
+            elif status == 4000:  # Error
+                print('Upload failed:', status_response['message'])
+                break
+            else:
+                progress = status_response.get('progress', 'Unknown')
+                print(f'Upload progress: {progress}%')
+                time.sleep(5)  # Wait before checking again
 
-        WebDriverWait(driver=self.driver, timeout=500).until(EC.presence_of_element_located(((By.XPATH, SeleniumXpaths.UrlLinkElement))))
-        link = self.driver.find_element(By.XPATH, SeleniumXpaths.UrlLinkElement).text
-        image = self.driver.find_element(By.XPATH, SeleniumXpaths.ImageElementXpath)
 
-        src = ''
-        while src == '':
-            src = image.get_attribute('src')
-            url = src
+        toast("[8/10]", "Successfully Uploaded to Diawi", 'success')
 
-        response = requests.get(url, stream=True)
+        toast("[9/10]", "Sending Message to Skype...")
+        skypeService.SendMsgToSkype(full_name, SystemPaths.ImageFolderPath, f"{message} Diawi Link: {link}", image=True, name=name)
+        os.remove(SystemPaths.ImageFolderPath)
+        toast("[10/10]", "Successfully Sent Message to Skype", 'success')
 
-        if not os.path.exists(SystemPaths.ImageDirectoryPath):
-            os.mkdir(SystemPaths.ImageDirectoryPath)
-
-        with open(SystemPaths.ImageFolderPath, 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
-
-        loader.stop("Uploaded to Diawi")
-
-        try:
-            print("Sending message to skype")
-            skypeService.SendMsgToSkype(full_name, SystemPaths.ImageFolderPath, f"{message} Diawi Link: {link}", image=True, name=name)
-            os.remove(SystemPaths.ImageFolderPath)
-
-        except:
-            print("An exception occurred")
-            traceback.print_exc()

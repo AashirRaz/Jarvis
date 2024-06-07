@@ -1,44 +1,49 @@
 from Constants import OS, PathConstants
-from reusableFunctions import jarvis_init
 from Credentials import Credentials
 import os
 import subprocess
 from SkypeService import SkypeService
 from DiawiService import DiawiService
-from loader import Loader
+from toast import toast
 
-def android_build(directory_path, build_type, sendToWhom, skypeService:SkypeService): 
-    try:
-        loader = Loader()
-        loader.start("1/4", "Android Build")
-        # Change to the "android" directory
-        android_path = os.path.join(directory_path, "android")
-        os.chdir(android_path)
+def android_build(directory_path: str, build_type, sendToWhom, skypeService:SkypeService): 
 
-        if build_type == "release":
-            
-            subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], check=True)
+    # Change to the "android" directory
+    android_path = os.path.join(directory_path, "android")
+    os.chdir(android_path)
 
-            # Determine the package size
-            package_path = os.path.join(android_path, PathConstants.AndroidPathAPK)
-            package_size = os.path.getsize(package_path) / (1024 * 1024)
+    project_name = directory_path.split('/')[-1]
 
-            print("Package size: ", package_size, "MB")
 
-            if package_size < (250 if Credentials.HasDiawiAccount else 50):
-                print("Uploading build to Diawi...")
-                diawiService = DiawiService()
-                diawiService.UploadToDiawi(sendToWhom, package_path, f"{directory_path} Apk", skypeService)
-            else:
-                print('Package size is too large to upload to Diawi')
-                skypeService.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
+    if build_type == "release":
+        toast("[5/10]", "Building Android Release APK...")
+        subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], shell=True, check=True,  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        if build_type == "bundle":
-            print("Making bundle build...")
+        # Determine the package size
+        package_path = os.path.join(android_path, PathConstants.AndroidPathAPK)
+        package_size = os.path.getsize(package_path) / (1024 * 1024)
 
-            subprocess.run(["./gradlew bundleRelease"] if OS.IOS else ["gradlew", "bundleRelease"], check=True)
-            package_path = os.path.join(android_path, PathConstants.AndroidPathBundle)
-            skypeService.SendMsgToSkype(sendToWhom , package_path, "{} build".format(directory_path))
-        loader.stop()
-    except:
-        pass
+        # print("Package size: ", package_size, "MB")
+        toast(message=f"Package size: {round(package_size)} MB", type='info')
+        toast("[6/10]", "Successfully Built Android Release APK", 'success')
+
+        if package_size < (250 if Credentials.HasDiawiAccount else 50):
+            diawiService = DiawiService()
+            diawiService.UploadToDiawi(sendToWhom, package_path, f"{project_name} APK", skypeService)
+        else:
+            toast("[6/10]", "Package size is too large to upload to Diawi", 'warning')
+            skypeService.SendMsgToSkype(sendToWhom , package_path, f"{package_path} APK")
+
+        # subprocess.run(["./gradlew clean"] if OS.IOS else ["gradlew", "clean"], shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    if build_type == "bundle":
+        toast("[5/10]", "Building Android Bundle AAB...")
+
+        subprocess.run(["./gradlew bundleRelease"] if OS.IOS else ["gradlew", "bundleRelease"], shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        package_path = os.path.join(android_path, PathConstants.AndroidPathBundle)
+
+        toast("[6/10]", "Successfully Built Android Bundle AAB", 'success')
+        toast("[7/10]", "Sending Message to Skype...")
+        skypeService.SendMsgToSkype(sendToWhom , package_path, f"{project_name} AAB")
+        os.remove(package_path)
+        toast("[8/10]", "Successfully Sent Message to Skype", 'success')
