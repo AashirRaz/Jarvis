@@ -15,6 +15,7 @@ def android_build(directory_path: str, build_type, sendToWhom, skypeService:Skyp
     project_name = directory_path.split('/')[-1]
 
     if build_type == "release":
+        print("\n")
         toast("[5/10]", "Building Android Release APK...")
         subprocess.run(["./gradlew assembleRelease"] if OS.IOS else ["gradlew", "assembleRelease"], shell=True, check=True,  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
