@@ -1,5 +1,6 @@
 from functools import partial
-from Constants import OS, PathConstants
+from Constants import OS
+from Credentials import Credentials
 import os
 import time
 from art import tprint
@@ -43,7 +44,7 @@ def filter_by_full_name(skypeContacts:list[str], full_names: list[str]) -> list[
 
 
 def jarvis_init(directory_path):
-    base_path = PathConstants.BasePath
+    base_path = Credentials.BasePath
     full_path = os.path.join(base_path, directory_path)
     os.chdir(full_path)
     return full_path

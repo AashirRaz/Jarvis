@@ -1,5 +1,3 @@
-
-
 class colors:
     GREEN = '\033[1m\033[92m'
     YELLOW_BOLD = '\033[1m\033[93m'

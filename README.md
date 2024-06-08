@@ -5,7 +5,6 @@ Jarvis is an open-source Android/IOS build pipeline for seamlessly compiling mob
 ## Pre-Requisites for Installation 🛠️
 
 - Python 3
-- ChromeDriver https://chromedriver.chromium.org/downloads (MacOS Setup Mentioned Below)
 - Powershell 7
 
 ## Getting Started 🚀
@@ -24,29 +23,22 @@ pip install -r windows_requirements.txt
 pip install -r mac_requirements.txt
 ```
 
+### Diawi Account
+
+- Create a Diawi Account and fill in the credentials in the Credentials.py file
+- Go to https://dashboard.diawi.com/profile/api and generate an API Key
+- Paste the API Key in the Credentials.py file
+
 - Create a Credentials.py File and structure it as follows
 
 ```py
 class Credentials:
     SkypeUserName = "Your Skype UserName"
     SkypePassword = "Your Skype Password"
-    HasDiawiAccount = False
-    DiawiEmail = ""
-    DiawiPassword = ""
-```
-
-- In the Constants.py file replace the following data
-
-```py
-class PathConstants:
+    DiawiEmail = "Your Diawi Email"
+    DiawiPassword = "Your Diawi Password"
+    DiawiApiKey = "Your Diawi API Key"
     BasePath = r"{Your directory containing all your projects goes here}"
-    AndroidPathAPK = r"app/build/outputs/apk/release/app-release.apk" if OS.IOS else r"app\build\outputs\apk\release\app-release.apk"
-    AndroidPathBundle = r"app/build/outputs/bundle/release/app-release.aab" if OS.IOS else r"app\build\outputs\bundle\release\app-release.aab"
-    IconPath = r"src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" if OS.IOS else  r"src\main\res\mipmap-xxxhdpi\ic_launcher_round.png"
-
-
-class SystemPaths:
-    ImageFolderPath = r"{Path to folder where you want to store temporary Diawi QR Screenshots}"
 ```
 
 ## Configuration ⚙️
@@ -70,7 +62,7 @@ Paste the below code into your notepad file
 
 ```ps1
 Function init {
-    $scriptPath = "Your Directory Path\Jarvis\jarvis_build.py"
+    $scriptPath = "{Your Directory Path}\Jarvis\jarvis_build.py"
 
     Invoke-Expression "python `"$scriptPath`""
 }
@@ -84,10 +76,6 @@ Copy the main directory location of your project and put in the PATH Environment
 
 ### MacOS
 
-1. Install Chromedriver and paste it into /usr/local/bin.
-2. If you cant find the path, press command+shift+G and type the path in the search box.
-3. Open the file in terminal once to register it with your Mac.
-
 Open your terminal and Enter the following code into your terminal
 
 ```zsh
@@ -97,19 +85,13 @@ cd ~
 Then enter this, your Bash Profile with open inside of a text editor
 
 ```zsh
-nano ~/.bash_profile
-```
-
-OR if you dont have Bash Profile
-
-```zsh
-nano ~/.zshrc
+nano ~/.bash_profile or ~/.zshrc
 ```
 
 Enter this into your bash_profile
 
 ```zsh
-alias jarvis_build="python3 {Path to your python file}"
+alias jarvis_build="python3 {Your Directory Path}/Jarvis/jarvis_build.py"
 ```
 
 Save changes to your file and exit the text editor

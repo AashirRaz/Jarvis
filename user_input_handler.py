@@ -1,18 +1,23 @@
-import inquirer
-from inquirer.themes import BlueComposure
-from Constants import PathConstants, OS, BuildPlatforms
+from Constants import OS, BuildPlatforms
 import os
-
+from InquirerPy import inquirer
+from Credentials import Credentials
 
 def getFolderNames() -> list[str]:
     folderNames = []
-    for path in os.listdir(PathConstants.BasePath):
-        if os.path.isdir(os.path.join(PathConstants.BasePath, path)):
-            folderNames.append(path)
+    base_path = Credentials.BasePath
+    
+    for path in os.listdir(base_path):
+        full_path = os.path.join(base_path, path)
+        if os.path.isdir(full_path):
+            android_path = os.path.join(full_path, "android")
+            ios_path = os.path.join(full_path, "ios")
+            if os.path.isdir(android_path) and os.path.isdir(ios_path):
+                folderNames.append(path)
+    
     return folderNames
 
 def HandleUserInput(skypeContacts:list[str]) -> list[str]:
-    questions = []
     result = []
     reactNativeFolders = ["android", "ios", "src"]
     current_directory = os.getcwd()
@@ -21,32 +26,43 @@ def HandleUserInput(skypeContacts:list[str]) -> list[str]:
     inDirectory = not all(os.path.exists(os.path.join(current_directory, f)) for f in reactNativeFolders)
 
     if inDirectory:
-        questions.append(inquirer.List("DirectoryPath", message="Which application do you want to compile?",choices=getFolderNames()))
+        DirectoryPath = inquirer.select(
+            message="Which application do you want to compile?",
+            choices=getFolderNames(),
+            ).execute()
+        result.append(DirectoryPath)
     else:
         result.append(project_name)
 
     if(OS.IOS):
-        questions.append(inquirer.List("Platform", message="For which platform do you want to build.", choices=[BuildPlatforms.Both, BuildPlatforms.Android, BuildPlatforms.IOS], default="Both")) 
-
-    questions.append(inquirer.List("BuildType", message="Which build type do you want to build", choices=["release","bundle"], default="release"))
-        
-    questions.append(inquirer.Checkbox(
-            "SkypeContacts", message="Select Skype Contacts to send application to  (Press <space> to select, <tab> to toggle all", choices=skypeContacts
-        )),
-
-    ans = inquirer.prompt(questions)
-
-    if inDirectory:
-        result.append(ans.get("DirectoryPath"))
-
-    if(OS.IOS):
-        result.append(ans.get("Platform"))
+        Platform = inquirer.select(
+            message="Which platform do you want to compile for?",
+            choices=[BuildPlatforms.Both, BuildPlatforms.Android, BuildPlatforms.IOS],
+            default=BuildPlatforms.Both
+            ).execute()
+        result.append(Platform)
     else:
         result.append(BuildPlatforms.Android)
-    
-    result.append(ans.get("BuildType"))
 
-    for contact in ans.get("SkypeContacts"):
+
+    BuildType = inquirer.select(
+        message="Which build type do you want to compile?",
+        choices=["release","bundle"],
+        default="release"
+        ).execute()
+    
+    result.append(BuildType)
+
+    SkypeContacts = inquirer.fuzzy(
+        message="Select Skype Contacts to send application to  (Press <tab> to select)",
+        choices=skypeContacts,
+        multiselect=True,
+        validate=lambda result: len(result) > 0,
+        invalid_message="minimum 1 selections",
+    ).execute()
+
+
+    for contact in SkypeContacts:
         result.append(contact)
 
     return result

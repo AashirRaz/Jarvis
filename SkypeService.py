@@ -1,24 +1,16 @@
 from skpy import Skype, chat
-from reusableFunctions import notification
 from Credentials import Credentials
 from reusableFunctions import filter_by_full_name
 import threading
 from toast import toast
-import os
-from yaspin import yaspin
-from yaspin.spinners import Spinners
-
-
 
 class SkypeService:
     def __init__(self) -> None:
-        sp1 = startToast("Connecting to Skype Server...")
+        toast("[1/10]", " Connecting to Skype Server...")
         global sk
-        sk = Skype(Credentials.SkypeUserName, Credentials.SkypePassword)
-        stopToast(sp1, "Successfully! Connected to Skype Server")
-
-        sp2 = startToast("Fetching Contacts...")
-
+        sk = Skype(Credentials.SkypeUserName, Credentials.SkypePassword)       
+        toast("[2/10]", " Connected to Skype Server Successfully...")
+        toast("[3/10]", " Fetching Contacts...")
         self.chats = {}
 
         for i in range(5):
@@ -26,14 +18,15 @@ class SkypeService:
             
         self.conversations = {}
 
-        stopToast(sp2, "Successfully! Fetched Contacts")
+        toast("[4/10]", " Contacts Fetched Successfully...\n")
 
-    def SendMsgToSkype(self, full_name, path, message):
-        contacts = filter_by_full_name(self.getContacts(), full_name)
+
+    def SendMsgToSkype(self, send_to_whom, message):
+        contacts = filter_by_full_name(self.getContacts(), send_to_whom)
 
         threads = []
         for contact in contacts:
-            thread = threading.Thread(target=self.sendMessagesInParallel, args=(contact, path, message))
+            thread = threading.Thread(target=self.sendMessagesInParallel, args=(contact, message))
             thread.start()
             threads.append(thread)
 
@@ -41,11 +34,9 @@ class SkypeService:
         for thread in threads:
             thread.join()
 
-    def sendMessagesInParallel(self, contact, path, message, image=False):
-        extension = path.split(".")[1]
+    def sendMessagesInParallel(self, contact, message):
         contactId = list(self.conversations.keys())[list(self.conversations.values()).index(contact)]
         ch:chat.SkypeChat = sk.chats.chat(contactId)
-        ch.sendFile(open(path, "rb"),name=f"{message}.{extension}", image=image)
         ch.sendMsg(message)
 
 
@@ -57,16 +48,3 @@ class SkypeService:
                  self.conversations[i.id] = i.topic
 
         return self.conversations.values()
-    
-
-def startToast(message: str):
-    sp = yaspin(text=message, color="cyan")
-    sp.start()
-    sp.spinner = Spinners.aesthetic
-
-    return sp
-
-def stopToast(sp, message: str):
-    sp.text = message
-    sp.green.ok("✔")
-    

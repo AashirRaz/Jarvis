@@ -2,7 +2,7 @@ from Credentials import Credentials
 import os
 import subprocess
 from SkypeService import SkypeService
-from DiawiService import DiawiService
+from DiawiService import UploadToDiawi
 import shutil
 from toast import toast
 
@@ -95,10 +95,10 @@ def ios_build(directory_path, build_type, send_to_whom, files: dict[str, str], s
             package_size = os.path.getsize(package_path) / (1024 * 1024)
             
             toast(message=f"Package size: {round(package_size)} MB", type='info')
-            
-            if package_size < (250 if Credentials.HasDiawiAccount else 50):
-                diawiService = DiawiService()
-                diawiService.UploadToDiawi(send_to_whom, package_path, f"{name} IPA", skype_service, name=name)
+
+            HasDiawiAccount = bool(Credentials.DiawiEmail) and bool(Credentials.DiawiPassword)
+            if package_size < (250 if HasDiawiAccount else 50):
+                UploadToDiawi(send_to_whom, package_path, f"{name} IPA", skype_service, name=name)
             else:
                 toast("[6/10]", "Package size is too large to upload to Diawi", 'warning')
                 skype_service.SendMsgToSkype(send_to_whom, package_path, f"{name} build")

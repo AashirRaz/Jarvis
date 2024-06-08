@@ -3,7 +3,7 @@ from Credentials import Credentials
 import os
 import subprocess
 from SkypeService import SkypeService
-from DiawiService import DiawiService
+from DiawiService import UploadToDiawi
 from toast import toast
 
 def android_build(directory_path: str, build_type, sendToWhom, skypeService:SkypeService): 
@@ -13,7 +13,6 @@ def android_build(directory_path: str, build_type, sendToWhom, skypeService:Skyp
     os.chdir(android_path)
 
     project_name = directory_path.split('/')[-1]
-
 
     if build_type == "release":
         toast("[5/10]", "Building Android Release APK...")
@@ -27,9 +26,9 @@ def android_build(directory_path: str, build_type, sendToWhom, skypeService:Skyp
         toast(message=f"Package size: {round(package_size)} MB", type='info')
         toast("[6/10]", "Successfully Built Android Release APK", 'success')
 
-        if package_size < (250 if Credentials.HasDiawiAccount else 50):
-            diawiService = DiawiService()
-            diawiService.UploadToDiawi(sendToWhom, package_path, f"{project_name} APK", skypeService)
+        HasDiawiAccount = bool(Credentials.DiawiEmail) and bool(Credentials.DiawiPassword)
+        if package_size < (250 if  HasDiawiAccount else 50):
+            UploadToDiawi(sendToWhom, package_path, f"{project_name} APK", skypeService)
         else:
             toast("[6/10]", "Package size is too large to upload to Diawi", 'warning')
             skypeService.SendMsgToSkype(sendToWhom , package_path, f"{package_path} APK")
