@@ -3,6 +3,7 @@ import os
 from InquirerPy import inquirer
 from Credentials import Credentials
 
+
 def getFolderNames() -> list[str]:
     folderNames = []
     base_path = Credentials.BasePath
@@ -16,6 +17,7 @@ def getFolderNames() -> list[str]:
                 folderNames.append(path)
     
     return folderNames
+
 
 def HandleUserInput(skypeContacts:list[str]) -> list[str]:
     result = []

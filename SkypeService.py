@@ -34,6 +34,7 @@ class SkypeService:
         for thread in threads:
             thread.join()
 
+
     def sendMessagesInParallel(self, contact, message):
         contactId = list(self.conversations.keys())[list(self.conversations.values()).index(contact)]
         ch:chat.SkypeChat = sk.chats.chat(contactId)

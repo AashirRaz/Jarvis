@@ -1,6 +1,6 @@
 from android_build import android_build, os
 from ios_build import find_ios_required_folder, ios_build
-from both_builds import multithreaded_build
+from both_builds import SingleThreadedBuild
 import SkypeService
 from Constants import BuildPlatforms, PathConstants
 from reusableFunctions import jarvis_init, notification
@@ -20,7 +20,7 @@ def create_build(result:list[str], skypeService:SkypeService) -> None:
         case BuildPlatforms.IOS:
             ios_build(directory_path, build_type, sendToWhom, files, skypeService)
         case BuildPlatforms.Both:
-            multithreaded_build(directory_path, build_type, sendToWhom,files, skypeService)
+            SingleThreadedBuild(directory_path, build_type, sendToWhom, files, skypeService)
 
     name = files["proj"].split(".")[0]
 
